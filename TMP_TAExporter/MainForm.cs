@@ -7,6 +7,8 @@ namespace TMP_TAExporter
 {
     public partial class MainForm : Form
     {
+        private int _timeRemaining;
+
         public MainForm()
         {
             InitializeComponent();
@@ -30,12 +32,41 @@ namespace TMP_TAExporter
 
         private void MainForm_Load(object sender, EventArgs e)
         {
+            _timeRemaining = Settings.Default.TimerInterval;
             txtTmpDbLoc.Text = Settings.Default.TmpDbLocation;
             txtIntegrityExport.Text = Settings.Default.IntegrityExportLocation;
             txtSamsungLocation.Text = Settings.Default.SamsungExportLocation;
+            numInterval.Value = Settings.Default.TimerInterval;
+            chkSamsungEnabled.Checked = Settings.Default.TimerEnabled;
 
             SamsungExport.OnProgressHandler += SamsungExport_OnProgressHandler;
             IntegrityExport.OnProgressHandler += IntegrityExport_OnProgressHandler;
+
+            timer1.Enabled = true;
+            timer1.Interval = 1000;
+            timer1.Tick += Timer1_Tick;
+            timer1.Start();
+        }
+
+        private void Timer1_Tick(object sender, EventArgs e)
+        {
+            timer1.Stop();
+            if (_timeRemaining == 0)
+            {
+                if (!chkSamsungEnabled.Checked) return;
+                AddMessage("Starting Automated Samsung Export");
+                var error = SamsungExport.ExportSamsung(new DateTime(), new DateTime(), true);
+                AddMessage(error);
+
+                _timeRemaining = Settings.Default.TimerInterval;
+            }
+            else
+            {
+                _timeRemaining -= 1;
+                if (chkSamsungEnabled.Enabled)
+                    lblNotification.Text = $"Seconds before processing starts: {_timeRemaining}";
+            }
+            timer1.Start();
         }
 
         private void IntegrityExport_OnProgressHandler(object sender, EventArgs e)
@@ -105,7 +136,7 @@ namespace TMP_TAExporter
 
         private void AddMessage(string message)
         {
-            rchStatus.Text += $"{message} \n";
+            rchStatus.Text = $"{message} \n" + rchStatus.Text;
         }
 
         private void btnSamsungLocBrowse_Click(object sender, EventArgs e)
@@ -122,8 +153,22 @@ namespace TMP_TAExporter
         private void btnStartIntegrity_Click(object sender, EventArgs e)
         {
             AddMessage("Starting Integrity Export");
-            var err = IntegrityExport.ExportIntegrity(dtIntegrityStart.Value, dtIntegrityEnd.Value);
+            var err = IntegrityExport.ExportIntegrity(dtIntegrityStart.Value, dtIntegrityEnd.Value,
+                chkApplyTarget.Checked);
             AddMessage(err);
+        }
+
+        private void numInterval_ValueChanged(object sender, EventArgs e)
+        {
+            Settings.Default.TimerInterval = (int) numInterval.Value;
+            Settings.Default.Save();
+            _timeRemaining = (int) numInterval.Value;
+        }
+
+        private void chkSamsungEnabled_CheckedChanged(object sender, EventArgs e)
+        {
+            Settings.Default.TimerEnabled = chkSamsungEnabled.Checked;
+            Settings.Default.Save();
         }
     }
 }

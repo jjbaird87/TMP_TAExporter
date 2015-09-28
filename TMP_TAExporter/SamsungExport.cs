@@ -26,7 +26,7 @@ namespace TMP_TAExporter
             }
         }
 
-        public static string ExportSamsung(DateTime from, DateTime to)
+        public static string ExportSamsung(DateTime from, DateTime to, bool checkNotExported = false)
         {
             if (_bRunning)
                 return @"Export already running";
@@ -38,6 +38,10 @@ namespace TMP_TAExporter
 
             try
             {
+                //Check if exported column is created
+                if (checkNotExported)
+                    CheckColumnCreated();
+
                 // Set the ServerType to 1 for connect to the embedded server
                 var connectionString =
                     "User=SYSDBA;" +
@@ -60,26 +64,46 @@ namespace TMP_TAExporter
                 var myCommand = new FbCommand
                 {
                     Connection = myConnection,
-                    Transaction = myTransaction,
-                    CommandText = "SELECT COUNT(*) FROM CLOCKING " +
-                                  "WHERE CLKDATE >= @START_DATE AND CLKDATE <= @END_DATE"
+                    Transaction = myTransaction
                 };
 
-                myCommand.Parameters.Add("@START_DATE", FbDbType.TimeStamp).Value = Helpers.GetLowestDt(from);
-                myCommand.Parameters.Add("@END_DATE", FbDbType.TimeStamp).Value = Helpers.GetHighestDt(to);
+                string query;
+                if (checkNotExported)
+                {
+                    query = "SELECT COUNT(*) FROM CLOCKING " +
+                            "WHERE EXPORTED = 0";
+                }
+                else
+                {
+                    query = "SELECT COUNT(*) FROM CLOCKING " +
+                            "WHERE CLKDATE >= @START_DATE AND CLKDATE <= @END_DATE";
+
+                    myCommand.Parameters.Add("@START_DATE", FbDbType.TimeStamp).Value = Helpers.GetLowestDt(from);
+                    myCommand.Parameters.Add("@END_DATE", FbDbType.TimeStamp).Value = Helpers.GetHighestDt(to);
+                }
+
+                //Assign Query to command
+                myCommand.CommandText = query;
+
 
                 //Get amount of records
                 var iCount = (int) myCommand.ExecuteScalar();
 
-                myCommand.CommandText = "SELECT * FROM CLOCKING " +
-                                        "WHERE CLKDATE >= @START_DATE AND CLKDATE <= @END_DATE";
+                if (checkNotExported)
+                {
+                    myCommand.CommandText = "SELECT * FROM CLOCKING " +
+                                            "WHERE EXPORTED = 0";
+                }
+                else
+                {
+                    myCommand.CommandText = "SELECT * FROM CLOCKING " +
+                                            "WHERE CLKDATE >= @START_DATE AND CLKDATE <= @END_DATE";
 
-                myCommand.Parameters.Add("@START_DATE", FbDbType.TimeStamp).Value = Helpers.GetLowestDt(from);
-                //.ToString("yyyMMdd");
-                myCommand.Parameters.Add("@END_DATE", FbDbType.TimeStamp).Value = Helpers.GetHighestDt(to);
-                //.ToString("yyyMMdd");
+                    myCommand.Parameters.Add("@START_DATE", FbDbType.TimeStamp).Value = Helpers.GetLowestDt(from);
+                    myCommand.Parameters.Add("@END_DATE", FbDbType.TimeStamp).Value = Helpers.GetHighestDt(to);
+                }
+
                 var myReader = myCommand.ExecuteReader();
-
                 while (myReader.Read())
                 {
                     //increment toolbar                    
@@ -121,12 +145,98 @@ namespace TMP_TAExporter
                 myConnection.Close();
                 _bRunning = false;
 
+                //Update exported fields
+                if (checkNotExported)
+                    UpdateExported();
+
                 return $"{iCount} record(s) processed";
             }
             catch (Exception ex)
             {
+                _bRunning = false;
                 return ex.Message + @" Row: " + iCounter;
             }
+        }
+
+        private static void CheckColumnCreated()
+        {
+            // Set the ServerType to 1 for connect to the embedded server
+            var connectionString =
+                "User=SYSDBA;" +
+                "Password=masterkey;" +
+                "Database=" + Settings.Default.TmpDbLocation + ";" +
+                "DataSource=localhost;" +
+                "Port=3050;" +
+                "Dialect=3;" +
+                "Charset=NONE;" +
+                "Role=;" +
+                "Connection lifetime=15;" +
+                "Pooling=true;" +
+                "Packet Size=8192;" +
+                "ServerType=0";
+
+            var myConnection = new FbConnection(connectionString);
+            myConnection.Open();
+
+            var myTransaction = myConnection.BeginTransaction();
+            var myCommand = new FbCommand
+            {
+                Connection = myConnection,
+                Transaction = myTransaction,
+                CommandText = "EXECUTE BLOCK AS BEGIN " +
+                              "IF(NOT EXISTS(" +
+                              "     SELECT 1 FROM RDB$RELATION_FIELDS rf WHERE rf.RDB$RELATION_NAME = 'CLOCKING' and rf.RDB$FIELD_NAME = 'EXPORTED')) " +
+                              "THEN " +
+                              "     EXECUTE STATEMENT 'ALTER TABLE CLOCKING ADD EXPORTED char(1) DEFAULT 0 NOT NULL'; " +
+                              "END "
+            };
+
+            //Execute command
+            myCommand.ExecuteNonQuery();
+            myTransaction.Commit();
+
+            //Close open connections
+            myConnection.Close();
+            myCommand.Dispose();
+            myConnection.Close();
+        }
+
+        private static void UpdateExported()
+        {
+            // Set the ServerType to 1 for connect to the embedded server
+            var connectionString =
+                "User=SYSDBA;" +
+                "Password=masterkey;" +
+                "Database=" + Settings.Default.TmpDbLocation + ";" +
+                "DataSource=localhost;" +
+                "Port=3050;" +
+                "Dialect=3;" +
+                "Charset=NONE;" +
+                "Role=;" +
+                "Connection lifetime=15;" +
+                "Pooling=true;" +
+                "Packet Size=8192;" +
+                "ServerType=0";
+
+            var myConnection = new FbConnection(connectionString);
+            myConnection.Open();
+
+            var myTransaction = myConnection.BeginTransaction();
+            var myCommand = new FbCommand
+            {
+                Connection = myConnection,
+                Transaction = myTransaction,
+                CommandText = "UPDATE CLOCKING SET EXPORTED = 1"
+            };
+
+            //Execute command
+            myCommand.ExecuteNonQuery();
+            myTransaction.Commit();
+
+            //Close open connections
+            myConnection.Close();
+            myCommand.Dispose();
+            myConnection.Close();
         }
 
         public class ProgressEventArgs : EventArgs

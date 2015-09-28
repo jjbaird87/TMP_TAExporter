@@ -28,10 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.chkApplyTarget = new System.Windows.Forms.CheckBox();
             this.btnStartIntegrity = new System.Windows.Forms.Button();
-            this.chkIntegrityEnabled = new System.Windows.Forms.CheckBox();
             this.btnBrowseIntegrity = new System.Windows.Forms.Button();
             this.label4 = new System.Windows.Forms.Label();
             this.txtIntegrityExport = new System.Windows.Forms.TextBox();
@@ -57,11 +58,16 @@
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolProgressBar = new System.Windows.Forms.ToolStripProgressBar();
             this.rchStatus = new System.Windows.Forms.RichTextBox();
+            this.label8 = new System.Windows.Forms.Label();
+            this.numInterval = new System.Windows.Forms.NumericUpDown();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.lblNotification = new System.Windows.Forms.ToolStripLabel();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage3.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.toolStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numInterval)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -78,8 +84,8 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.chkApplyTarget);
             this.tabPage1.Controls.Add(this.btnStartIntegrity);
-            this.tabPage1.Controls.Add(this.chkIntegrityEnabled);
             this.tabPage1.Controls.Add(this.btnBrowseIntegrity);
             this.tabPage1.Controls.Add(this.label4);
             this.tabPage1.Controls.Add(this.txtIntegrityExport);
@@ -95,6 +101,18 @@
             this.tabPage1.Text = "Integrity Export";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
+            // chkApplyTarget
+            // 
+            this.chkApplyTarget.AutoSize = true;
+            this.chkApplyTarget.Checked = true;
+            this.chkApplyTarget.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkApplyTarget.Location = new System.Drawing.Point(23, 20);
+            this.chkApplyTarget.Name = "chkApplyTarget";
+            this.chkApplyTarget.Size = new System.Drawing.Size(96, 17);
+            this.chkApplyTarget.TabIndex = 9;
+            this.chkApplyTarget.Text = "Balance Hours";
+            this.chkApplyTarget.UseVisualStyleBackColor = true;
+            // 
             // btnStartIntegrity
             // 
             this.btnStartIntegrity.Location = new System.Drawing.Point(23, 163);
@@ -104,16 +122,6 @@
             this.btnStartIntegrity.Text = "Start Export";
             this.btnStartIntegrity.UseVisualStyleBackColor = true;
             this.btnStartIntegrity.Click += new System.EventHandler(this.btnStartIntegrity_Click);
-            // 
-            // chkIntegrityEnabled
-            // 
-            this.chkIntegrityEnabled.AutoSize = true;
-            this.chkIntegrityEnabled.Location = new System.Drawing.Point(23, 21);
-            this.chkIntegrityEnabled.Name = "chkIntegrityEnabled";
-            this.chkIntegrityEnabled.Size = new System.Drawing.Size(65, 17);
-            this.chkIntegrityEnabled.TabIndex = 7;
-            this.chkIntegrityEnabled.Text = "Enabled";
-            this.chkIntegrityEnabled.UseVisualStyleBackColor = true;
             // 
             // btnBrowseIntegrity
             // 
@@ -233,10 +241,11 @@
             this.chkSamsungEnabled.AutoSize = true;
             this.chkSamsungEnabled.Location = new System.Drawing.Point(17, 17);
             this.chkSamsungEnabled.Name = "chkSamsungEnabled";
-            this.chkSamsungEnabled.Size = new System.Drawing.Size(65, 17);
+            this.chkSamsungEnabled.Size = new System.Drawing.Size(88, 17);
             this.chkSamsungEnabled.TabIndex = 16;
-            this.chkSamsungEnabled.Text = "Enabled";
+            this.chkSamsungEnabled.Text = "Enable Timer";
             this.chkSamsungEnabled.UseVisualStyleBackColor = true;
+            this.chkSamsungEnabled.CheckedChanged += new System.EventHandler(this.chkSamsungEnabled_CheckedChanged);
             // 
             // dtSamsungEnd
             // 
@@ -272,6 +281,8 @@
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.numInterval);
+            this.tabPage2.Controls.Add(this.label8);
             this.tabPage2.Controls.Add(this.btnTestConnection);
             this.tabPage2.Controls.Add(this.btnTmpDbLoc);
             this.tabPage2.Controls.Add(this.label1);
@@ -324,7 +335,8 @@
             // 
             this.toolStrip1.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolProgressBar});
+            this.toolProgressBar,
+            this.lblNotification});
             this.toolStrip1.Location = new System.Drawing.Point(0, 522);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(393, 25);
@@ -346,6 +358,39 @@
             this.rchStatus.TabIndex = 18;
             this.rchStatus.Text = "";
             // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(11, 90);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(123, 13);
+            this.label8.TabIndex = 4;
+            this.label8.Text = "Timer Interval (seconds):";
+            // 
+            // numInterval
+            // 
+            this.numInterval.Location = new System.Drawing.Point(14, 107);
+            this.numInterval.Maximum = new decimal(new int[] {
+            9999,
+            0,
+            0,
+            0});
+            this.numInterval.Name = "numInterval";
+            this.numInterval.Size = new System.Drawing.Size(360, 20);
+            this.numInterval.TabIndex = 5;
+            this.numInterval.Value = new decimal(new int[] {
+            360,
+            0,
+            0,
+            0});
+            this.numInterval.ValueChanged += new System.EventHandler(this.numInterval_ValueChanged);
+            // 
+            // lblNotification
+            // 
+            this.lblNotification.Name = "lblNotification";
+            this.lblNotification.Size = new System.Drawing.Size(138, 22);
+            this.lblNotification.Text = "Time till next processing:";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -366,6 +411,7 @@
             this.tabPage2.PerformLayout();
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numInterval)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -385,7 +431,6 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TabPage tabPage3;
-        private System.Windows.Forms.CheckBox chkIntegrityEnabled;
         private System.Windows.Forms.Button btnStartIntegrity;
         private System.Windows.Forms.Button btnStartSamsungExport;
         private System.Windows.Forms.CheckBox chkSamsungEnabled;
@@ -402,6 +447,11 @@
         private System.Windows.Forms.Button btnSamsungLocBrowse;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.TextBox txtSamsungLocation;
+        private System.Windows.Forms.CheckBox chkApplyTarget;
+        private System.Windows.Forms.NumericUpDown numInterval;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Timer timer1;
+        private System.Windows.Forms.ToolStripLabel lblNotification;
     }
 }
 

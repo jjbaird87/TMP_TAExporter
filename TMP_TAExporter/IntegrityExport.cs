@@ -27,7 +27,7 @@ namespace TMP_TAExporter
             }
         }
 
-        public static string ExportIntegrity(DateTime from, DateTime to)
+        public static string ExportIntegrity(DateTime from, DateTime to, bool applyTargetHoursCalc)
         {
             if (_bRunning)
                 return @"Export already running";
@@ -83,7 +83,9 @@ namespace TMP_TAExporter
                 var normalTime = 0.0;
                 var overTime = 0.0;
                 var doubleTime = 0.0;
-                var lastEmployee="";
+                var targetHours0 = 0.0;
+                var lastEmployee = "";
+                var internalCounter = 0;
                 while (myReader.Read())
                 {
                     //increment toolbar                    
@@ -91,13 +93,39 @@ namespace TMP_TAExporter
 
                     //Last employee
                     var emp = myReader["EMPNO"].ToString();
-                    if (emp != lastEmployee && lastEmployee!="")
+                    if (emp != lastEmployee && lastEmployee != "" || internalCounter == iCount)
                     {
+                        if (applyTargetHoursCalc)
+                        {
+                            //Calculate hours vs target hours
+                            if (Math.Abs(targetHours0) > 0)
+                            {
+                                if (targetHours0 > normalTime)
+                                {
+                                    var difference = targetHours0 - normalTime;
+                                    //Check if there are enough hours available in overtime
+                                    if (overTime > 0)
+                                    {
+                                        if (overTime >= difference)
+                                        {
+                                            overTime -= difference;
+                                            normalTime += difference;
+                                        }
+                                        else
+                                        {
+                                            overTime = 0.0;
+                                            normalTime += overTime;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
                         var line =
                             $"{emp.PadRight(6, ' ')} " +
                             $"{normalTime.ToString(CultureInfo.InvariantCulture).PadLeft(3, '0')}" +
                             $"{overTime.ToString(CultureInfo.InvariantCulture).PadLeft(3, '0')}" +
-                            $"{doubleTime.ToString(CultureInfo.InvariantCulture).PadLeft(3, '0')}" +
+                            $"{doubleTime.ToString(CultureInfo.InvariantCulture).PadLeft(3, '0')}000000" +
                             $"{Environment.NewLine}";
 
                         using (var sw = new StreamWriter(fileName, true))
@@ -105,35 +133,23 @@ namespace TMP_TAExporter
                             sw.Write(line);
                         }
 
+                        targetHours0 = 0;
                         normalTime = 0;
                         overTime = 0;
                         doubleTime = 0;
                     }
                     else
                     {
+                        targetHours0 += Convert.ToDouble(myReader["TARGET0"]);
                         normalTime += Convert.ToDouble(myReader["CALC0"]);
                         overTime += Convert.ToDouble(myReader["CALC1"]);
                         doubleTime += Convert.ToDouble(myReader["CALC2"]);
                     }
 
                     lastEmployee = emp;
-                    
+
                     Application.DoEvents();
-                }
-
-                if (iCount > 0)
-                {
-                    var lineLast =
-                        $"{lastEmployee.PadRight(6, ' ')} " +
-                        $"{normalTime.ToString(CultureInfo.InvariantCulture).PadLeft(3, '0')}" +
-                        $"{overTime.ToString(CultureInfo.InvariantCulture).PadLeft(3, '0')}" +
-                        $"{doubleTime.ToString(CultureInfo.InvariantCulture).PadLeft(3, '0')}" +
-                        $"{Environment.NewLine}";
-
-                    using (var sw = new StreamWriter(fileName, true))
-                    {
-                        sw.Write(lineLast);
-                    }
+                    internalCounter++;
                 }
 
                 OnProgress(100);
@@ -147,6 +163,7 @@ namespace TMP_TAExporter
             }
             catch (Exception ex)
             {
+                _bRunning = false;
                 return ex.Message + @" Row: " + iCounter;
             }
         }
