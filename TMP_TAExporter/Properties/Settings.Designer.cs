@@ -82,5 +82,29 @@ namespace TMP_TAExporter.Properties {
                 this["TimerEnabled"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string PeopleExportLocation {
+            get {
+                return ((string)(this["PeopleExportLocation"]));
+            }
+            set {
+                this["PeopleExportLocation"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string PeopleShiftsExportLocation {
+            get {
+                return ((string)(this["PeopleShiftsExportLocation"]));
+            }
+            set {
+                this["PeopleShiftsExportLocation"] = value;
+            }
+        }
     }
 }

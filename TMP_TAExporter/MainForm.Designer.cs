@@ -50,30 +50,44 @@
             this.dtSamsungStart = new System.Windows.Forms.DateTimePicker();
             this.label6 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
+            this.tabPage4 = new System.Windows.Forms.TabPage();
+            this.button1 = new System.Windows.Forms.Button();
+            this.btnBrowsePP = new System.Windows.Forms.Button();
+            this.label9 = new System.Windows.Forms.Label();
+            this.txtPPLocation = new System.Windows.Forms.TextBox();
+            this.dtPPEnd = new System.Windows.Forms.DateTimePicker();
+            this.dtPPStart = new System.Windows.Forms.DateTimePicker();
+            this.label10 = new System.Windows.Forms.Label();
+            this.label11 = new System.Windows.Forms.Label();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.numInterval = new System.Windows.Forms.NumericUpDown();
+            this.label8 = new System.Windows.Forms.Label();
             this.btnTestConnection = new System.Windows.Forms.Button();
             this.btnTmpDbLoc = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.txtTmpDbLoc = new System.Windows.Forms.TextBox();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolProgressBar = new System.Windows.Forms.ToolStripProgressBar();
-            this.rchStatus = new System.Windows.Forms.RichTextBox();
-            this.label8 = new System.Windows.Forms.Label();
-            this.numInterval = new System.Windows.Forms.NumericUpDown();
-            this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.lblNotification = new System.Windows.Forms.ToolStripLabel();
+            this.rchStatus = new System.Windows.Forms.RichTextBox();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.btnBrowsePPShifts = new System.Windows.Forms.Button();
+            this.label12 = new System.Windows.Forms.Label();
+            this.txtPPShiftsLocation = new System.Windows.Forms.TextBox();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage3.SuspendLayout();
+            this.tabPage4.SuspendLayout();
             this.tabPage2.SuspendLayout();
-            this.toolStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numInterval)).BeginInit();
+            this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControl1
             // 
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage3);
+            this.tabControl1.Controls.Add(this.tabPage4);
             this.tabControl1.Controls.Add(this.tabPage2);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
@@ -279,6 +293,95 @@
             this.label7.TabIndex = 9;
             this.label7.Text = "From Date:";
             // 
+            // tabPage4
+            // 
+            this.tabPage4.Controls.Add(this.btnBrowsePPShifts);
+            this.tabPage4.Controls.Add(this.label12);
+            this.tabPage4.Controls.Add(this.txtPPShiftsLocation);
+            this.tabPage4.Controls.Add(this.button1);
+            this.tabPage4.Controls.Add(this.btnBrowsePP);
+            this.tabPage4.Controls.Add(this.label9);
+            this.tabPage4.Controls.Add(this.txtPPLocation);
+            this.tabPage4.Controls.Add(this.dtPPEnd);
+            this.tabPage4.Controls.Add(this.dtPPStart);
+            this.tabPage4.Controls.Add(this.label10);
+            this.tabPage4.Controls.Add(this.label11);
+            this.tabPage4.Location = new System.Drawing.Point(4, 22);
+            this.tabPage4.Name = "tabPage4";
+            this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage4.Size = new System.Drawing.Size(385, 521);
+            this.tabPage4.TabIndex = 3;
+            this.tabPage4.Text = "Peoples Payroll Export";
+            this.tabPage4.UseVisualStyleBackColor = true;
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(8, 170);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(354, 23);
+            this.button1.TabIndex = 16;
+            this.button1.Text = "Start Export";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click_1);
+            // 
+            // btnBrowsePP
+            // 
+            this.btnBrowsePP.Location = new System.Drawing.Point(335, 32);
+            this.btnBrowsePP.Name = "btnBrowsePP";
+            this.btnBrowsePP.Size = new System.Drawing.Size(30, 20);
+            this.btnBrowsePP.TabIndex = 15;
+            this.btnBrowsePP.Text = "...";
+            this.btnBrowsePP.UseVisualStyleBackColor = true;
+            this.btnBrowsePP.Click += new System.EventHandler(this.btnBrowsePP_Click);
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(8, 16);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(121, 13);
+            this.label9.TabIndex = 14;
+            this.label9.Text = "Export Location (Hours):";
+            // 
+            // txtPPLocation
+            // 
+            this.txtPPLocation.Location = new System.Drawing.Point(11, 32);
+            this.txtPPLocation.Name = "txtPPLocation";
+            this.txtPPLocation.Size = new System.Drawing.Size(318, 20);
+            this.txtPPLocation.TabIndex = 13;
+            // 
+            // dtPPEnd
+            // 
+            this.dtPPEnd.Location = new System.Drawing.Point(70, 131);
+            this.dtPPEnd.Name = "dtPPEnd";
+            this.dtPPEnd.Size = new System.Drawing.Size(292, 20);
+            this.dtPPEnd.TabIndex = 12;
+            // 
+            // dtPPStart
+            // 
+            this.dtPPStart.Location = new System.Drawing.Point(70, 105);
+            this.dtPPStart.Name = "dtPPStart";
+            this.dtPPStart.Size = new System.Drawing.Size(292, 20);
+            this.dtPPStart.TabIndex = 11;
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(5, 137);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(49, 13);
+            this.label10.TabIndex = 10;
+            this.label10.Text = "To Date:";
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(5, 111);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(59, 13);
+            this.label11.TabIndex = 9;
+            this.label11.Text = "From Date:";
+            // 
             // tabPage2
             // 
             this.tabPage2.Controls.Add(this.numInterval);
@@ -294,6 +397,33 @@
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Settings";
             this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // numInterval
+            // 
+            this.numInterval.Location = new System.Drawing.Point(14, 107);
+            this.numInterval.Maximum = new decimal(new int[] {
+            9999,
+            0,
+            0,
+            0});
+            this.numInterval.Name = "numInterval";
+            this.numInterval.Size = new System.Drawing.Size(360, 20);
+            this.numInterval.TabIndex = 5;
+            this.numInterval.Value = new decimal(new int[] {
+            360,
+            0,
+            0,
+            0});
+            this.numInterval.ValueChanged += new System.EventHandler(this.numInterval_ValueChanged);
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(11, 90);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(123, 13);
+            this.label8.TabIndex = 4;
+            this.label8.Text = "Timer Interval (seconds):";
             // 
             // btnTestConnection
             // 
@@ -348,6 +478,12 @@
             this.toolProgressBar.Name = "toolProgressBar";
             this.toolProgressBar.Size = new System.Drawing.Size(100, 22);
             // 
+            // lblNotification
+            // 
+            this.lblNotification.Name = "lblNotification";
+            this.lblNotification.Size = new System.Drawing.Size(138, 22);
+            this.lblNotification.Text = "Time till next processing:";
+            // 
             // rchStatus
             // 
             this.rchStatus.Dock = System.Windows.Forms.DockStyle.Bottom;
@@ -358,38 +494,31 @@
             this.rchStatus.TabIndex = 18;
             this.rchStatus.Text = "";
             // 
-            // label8
+            // btnBrowsePPShifts
             // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(11, 90);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(123, 13);
-            this.label8.TabIndex = 4;
-            this.label8.Text = "Timer Interval (seconds):";
+            this.btnBrowsePPShifts.Location = new System.Drawing.Point(335, 71);
+            this.btnBrowsePPShifts.Name = "btnBrowsePPShifts";
+            this.btnBrowsePPShifts.Size = new System.Drawing.Size(30, 20);
+            this.btnBrowsePPShifts.TabIndex = 19;
+            this.btnBrowsePPShifts.Text = "...";
+            this.btnBrowsePPShifts.UseVisualStyleBackColor = true;
+            this.btnBrowsePPShifts.Click += new System.EventHandler(this.btnBrowsePPShifts_Click);
             // 
-            // numInterval
+            // label12
             // 
-            this.numInterval.Location = new System.Drawing.Point(14, 107);
-            this.numInterval.Maximum = new decimal(new int[] {
-            9999,
-            0,
-            0,
-            0});
-            this.numInterval.Name = "numInterval";
-            this.numInterval.Size = new System.Drawing.Size(360, 20);
-            this.numInterval.TabIndex = 5;
-            this.numInterval.Value = new decimal(new int[] {
-            360,
-            0,
-            0,
-            0});
-            this.numInterval.ValueChanged += new System.EventHandler(this.numInterval_ValueChanged);
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(8, 55);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(119, 13);
+            this.label12.TabIndex = 18;
+            this.label12.Text = "Export Location (Shifts):";
             // 
-            // lblNotification
+            // txtPPShiftsLocation
             // 
-            this.lblNotification.Name = "lblNotification";
-            this.lblNotification.Size = new System.Drawing.Size(138, 22);
-            this.lblNotification.Text = "Time till next processing:";
+            this.txtPPShiftsLocation.Location = new System.Drawing.Point(11, 71);
+            this.txtPPShiftsLocation.Name = "txtPPShiftsLocation";
+            this.txtPPShiftsLocation.Size = new System.Drawing.Size(318, 20);
+            this.txtPPShiftsLocation.TabIndex = 17;
             // 
             // MainForm
             // 
@@ -407,11 +536,13 @@
             this.tabPage1.PerformLayout();
             this.tabPage3.ResumeLayout(false);
             this.tabPage3.PerformLayout();
+            this.tabPage4.ResumeLayout(false);
+            this.tabPage4.PerformLayout();
             this.tabPage2.ResumeLayout(false);
             this.tabPage2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numInterval)).EndInit();
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numInterval)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -452,6 +583,18 @@
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.ToolStripLabel lblNotification;
+        private System.Windows.Forms.TabPage tabPage4;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button btnBrowsePP;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.TextBox txtPPLocation;
+        private System.Windows.Forms.DateTimePicker dtPPEnd;
+        private System.Windows.Forms.DateTimePicker dtPPStart;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.Button btnBrowsePPShifts;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.TextBox txtPPShiftsLocation;
     }
 }
 

@@ -35,17 +35,25 @@ namespace TMP_TAExporter
             _timeRemaining = Settings.Default.TimerInterval;
             txtTmpDbLoc.Text = Settings.Default.TmpDbLocation;
             txtIntegrityExport.Text = Settings.Default.IntegrityExportLocation;
+            txtPPLocation.Text = Settings.Default.PeopleExportLocation;
+            txtPPShiftsLocation.Text = Settings.Default.PeopleShiftsExportLocation;
             txtSamsungLocation.Text = Settings.Default.SamsungExportLocation;
             numInterval.Value = Settings.Default.TimerInterval;
             chkSamsungEnabled.Checked = Settings.Default.TimerEnabled;
 
             SamsungExport.OnProgressHandler += SamsungExport_OnProgressHandler;
             IntegrityExport.OnProgressHandler += IntegrityExport_OnProgressHandler;
+            PeoplePayroll.OnProgressHandler += PeoplePayroll_OnProgressHandler;
 
             timer1.Enabled = true;
             timer1.Interval = 1000;
             timer1.Tick += Timer1_Tick;
             timer1.Start();
+        }
+
+        private void PeoplePayroll_OnProgressHandler(object sender, EventArgs e)
+        {
+            toolProgressBar.Value = ((PeoplePayroll.ProgressEventArgs)e).Progress;
         }
 
         private void Timer1_Tick(object sender, EventArgs e)
@@ -168,6 +176,45 @@ namespace TMP_TAExporter
         private void chkSamsungEnabled_CheckedChanged(object sender, EventArgs e)
         {
             Settings.Default.TimerEnabled = chkSamsungEnabled.Checked;
+            Settings.Default.Save();
+        }
+
+        private void btnBrowsePP_Click(object sender, EventArgs e)
+        {
+            var openDlg = new SaveFileDialog
+            {
+                FileName = "Hours.xlsx",
+                Filter = @"xlsx Files (*.xlsx)|*.xlsx|All files (*.*)|*.*",
+                AddExtension = true
+            };
+            if (openDlg.ShowDialog() != DialogResult.OK)
+                return;
+
+            txtPPLocation.Text = openDlg.FileName;
+            Settings.Default.PeopleExportLocation = openDlg.FileName;
+            Settings.Default.Save();
+        }
+
+        private void button1_Click_1(object sender, EventArgs e)
+        {
+            AddMessage("Starting People's Payroll Export");
+            var err = PeoplePayroll.Export(dtPPStart.Value, dtPPEnd.Value);
+            AddMessage(err);
+        }
+
+        private void btnBrowsePPShifts_Click(object sender, EventArgs e)
+        {
+            var openDlg = new SaveFileDialog
+            {
+                FileName = "Shifts.xlsx",
+                Filter = @"xlsx Files (*.xlsx)|*.xlsx|All files (*.*)|*.*",
+                AddExtension = true
+            };
+            if (openDlg.ShowDialog() != DialogResult.OK)
+                return;
+
+            txtPPShiftsLocation.Text = openDlg.FileName;
+            Settings.Default.PeopleShiftsExportLocation = openDlg.FileName;
             Settings.Default.Save();
         }
     }

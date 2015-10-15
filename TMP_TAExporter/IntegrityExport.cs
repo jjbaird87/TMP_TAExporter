@@ -83,6 +83,8 @@ namespace TMP_TAExporter
                 var normalTime = 0.0;
                 var overTime = 0.0;
                 var doubleTime = 0.0;
+                var calc3 = 0.0;
+                var calc4 = 0.0;
                 var targetHours0 = 0.0;
                 var lastEmployee = "";
                 var internalCounter = 0;
@@ -95,6 +97,17 @@ namespace TMP_TAExporter
                     var emp = myReader["EMPNO"].ToString();
                     if (emp != lastEmployee && lastEmployee != "" || internalCounter == iCount)
                     {
+                        //If it is the last record, add the last hours
+                        if (internalCounter == iCount)
+                        {
+                            targetHours0 += Convert.ToDouble(myReader["TARGET0"]);
+                            normalTime += Convert.ToDouble(myReader["CALC0"]);
+                            overTime += Convert.ToDouble(myReader["CALC1"]);
+                            doubleTime += Convert.ToDouble(myReader["CALC2"]);
+                            calc3 += Convert.ToDouble(myReader["CALC3"]);
+                            calc4 += Convert.ToDouble(myReader["CALC4"]);
+                        }
+
                         if (applyTargetHoursCalc)
                         {
                             //Calculate hours vs target hours
@@ -125,7 +138,9 @@ namespace TMP_TAExporter
                             $"{emp.PadRight(6, ' ')} " +
                             $"{normalTime.ToString(CultureInfo.InvariantCulture).PadLeft(3, '0')}" +
                             $"{overTime.ToString(CultureInfo.InvariantCulture).PadLeft(3, '0')}" +
-                            $"{doubleTime.ToString(CultureInfo.InvariantCulture).PadLeft(3, '0')}000000" +
+                            $"{doubleTime.ToString(CultureInfo.InvariantCulture).PadLeft(3, '0')}" +
+                            $"{calc3.ToString(CultureInfo.InvariantCulture).PadLeft(3, '0')}" +
+                            $"{calc4.ToString(CultureInfo.InvariantCulture).PadLeft(3, '0')}" +
                             $"{Environment.NewLine}";
 
                         using (var sw = new StreamWriter(fileName, true))
@@ -144,6 +159,8 @@ namespace TMP_TAExporter
                         normalTime += Convert.ToDouble(myReader["CALC0"]);
                         overTime += Convert.ToDouble(myReader["CALC1"]);
                         doubleTime += Convert.ToDouble(myReader["CALC2"]);
+                        calc3 += Convert.ToDouble(myReader["CALC3"]);
+                        calc4 += Convert.ToDouble(myReader["CALC4"]);
                     }
 
                     lastEmployee = emp;
