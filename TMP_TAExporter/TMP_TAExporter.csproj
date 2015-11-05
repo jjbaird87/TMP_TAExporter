@@ -60,6 +60,9 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\ComboBoxItemCostCentre.cs" />
+    <Compile Include="Classes\CostCentre.cs" />
+    <Compile Include="Classes\DataAccess.cs" />
     <Compile Include="CreateExcelFile.cs" />
     <Compile Include="Helpers.cs" />
     <Compile Include="IntegrityExport.cs" />

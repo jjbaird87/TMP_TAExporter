@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 using FirebirdSql.Data.FirebirdClient;
+using TMP_TAExporter.Classes;
 using TMP_TAExporter.Properties;
 
 namespace TMP_TAExporter
@@ -40,16 +41,21 @@ namespace TMP_TAExporter
             txtSamsungLocation.Text = Settings.Default.SamsungExportLocation;
             numInterval.Value = Settings.Default.TimerInterval;
             chkSamsungEnabled.Checked = Settings.Default.TimerEnabled;
+            chkEnableFilters.Checked = Settings.Default.EnableIntegrityFilters;
 
             SamsungExport.OnProgressHandler += SamsungExport_OnProgressHandler;
             IntegrityExport.OnProgressHandler += IntegrityExport_OnProgressHandler;
             PeoplePayroll.OnProgressHandler += PeoplePayroll_OnProgressHandler;
+
+            LoadCostCentres();
 
             timer1.Enabled = true;
             timer1.Interval = 1000;
             timer1.Tick += Timer1_Tick;
             timer1.Start();
         }
+
+
 
         private void PeoplePayroll_OnProgressHandler(object sender, EventArgs e)
         {
@@ -161,8 +167,10 @@ namespace TMP_TAExporter
         private void btnStartIntegrity_Click(object sender, EventArgs e)
         {
             AddMessage("Starting Integrity Export");
+            var ccFrom = ((ComboBoxItemCostCentre) cmbccFrom.SelectedItem).ItemObject.Code;
+            var ccTo = ((ComboBoxItemCostCentre)cmbccTo.SelectedItem).ItemObject.Code;
             var err = IntegrityExport.ExportIntegrity(dtIntegrityStart.Value, dtIntegrityEnd.Value,
-                chkApplyTarget.Checked);
+                chkApplyTarget.Checked, chkEnableFilters.Checked, ccFrom, ccTo);
             AddMessage(err);
         }
 
@@ -217,5 +225,43 @@ namespace TMP_TAExporter
             Settings.Default.PeopleShiftsExportLocation = openDlg.FileName;
             Settings.Default.Save();
         }
+
+        private void chkEnableFilters_CheckedChanged(object sender, EventArgs e)
+        {
+            Settings.Default.EnableIntegrityFilters = chkEnableFilters.Checked;
+            Settings.Default.Save();
+        }
+
+        private void btnRefreshDepartments_Click(object sender, EventArgs e)
+        {
+            LoadCostCentres();
+        }
+
+        private void LoadCostCentres()
+        {
+            if (Settings.Default.TmpDbLocation =="")
+                return;
+
+            var da = new DataAccess(Settings.Default.TmpDbLocation);
+            var cc =  da.GetCostCentres();
+            foreach (var costCentre in cc)
+            {
+                cmbccFrom.Items.Add(new ComboBoxItemCostCentre
+                {
+                    ItemObject = costCentre
+                });
+                cmbccTo.Items.Add(new ComboBoxItemCostCentre
+                {
+                    ItemObject = costCentre
+                });
+            }
+
+            if (cmbccFrom.Items.Count > 0)
+                cmbccFrom.SelectedIndex = 0;
+
+            if (cmbccTo.Items.Count > 0)
+                cmbccTo.SelectedIndex = cmbccTo.Items.Count-1;
+        }
+
     }
 }

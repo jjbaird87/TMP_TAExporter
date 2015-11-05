@@ -51,6 +51,9 @@
             this.label6 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.tabPage4 = new System.Windows.Forms.TabPage();
+            this.btnBrowsePPShifts = new System.Windows.Forms.Button();
+            this.label12 = new System.Windows.Forms.Label();
+            this.txtPPShiftsLocation = new System.Windows.Forms.TextBox();
             this.button1 = new System.Windows.Forms.Button();
             this.btnBrowsePP = new System.Windows.Forms.Button();
             this.label9 = new System.Windows.Forms.Label();
@@ -71,9 +74,13 @@
             this.lblNotification = new System.Windows.Forms.ToolStripLabel();
             this.rchStatus = new System.Windows.Forms.RichTextBox();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.btnBrowsePPShifts = new System.Windows.Forms.Button();
-            this.label12 = new System.Windows.Forms.Label();
-            this.txtPPShiftsLocation = new System.Windows.Forms.TextBox();
+            this.grpIntegrityFilters = new System.Windows.Forms.GroupBox();
+            this.chkEnableFilters = new System.Windows.Forms.CheckBox();
+            this.cmbccFrom = new System.Windows.Forms.ComboBox();
+            this.cmbccTo = new System.Windows.Forms.ComboBox();
+            this.label13 = new System.Windows.Forms.Label();
+            this.label14 = new System.Windows.Forms.Label();
+            this.btnRefreshDepartments = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage3.SuspendLayout();
@@ -81,6 +88,7 @@
             this.tabPage2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numInterval)).BeginInit();
             this.toolStrip1.SuspendLayout();
+            this.grpIntegrityFilters.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -98,6 +106,7 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.grpIntegrityFilters);
             this.tabPage1.Controls.Add(this.chkApplyTarget);
             this.tabPage1.Controls.Add(this.btnStartIntegrity);
             this.tabPage1.Controls.Add(this.btnBrowseIntegrity);
@@ -129,7 +138,7 @@
             // 
             // btnStartIntegrity
             // 
-            this.btnStartIntegrity.Location = new System.Drawing.Point(23, 163);
+            this.btnStartIntegrity.Location = new System.Drawing.Point(23, 306);
             this.btnStartIntegrity.Name = "btnStartIntegrity";
             this.btnStartIntegrity.Size = new System.Drawing.Size(354, 23);
             this.btnStartIntegrity.TabIndex = 8;
@@ -314,6 +323,32 @@
             this.tabPage4.Text = "Peoples Payroll Export";
             this.tabPage4.UseVisualStyleBackColor = true;
             // 
+            // btnBrowsePPShifts
+            // 
+            this.btnBrowsePPShifts.Location = new System.Drawing.Point(335, 71);
+            this.btnBrowsePPShifts.Name = "btnBrowsePPShifts";
+            this.btnBrowsePPShifts.Size = new System.Drawing.Size(30, 20);
+            this.btnBrowsePPShifts.TabIndex = 19;
+            this.btnBrowsePPShifts.Text = "...";
+            this.btnBrowsePPShifts.UseVisualStyleBackColor = true;
+            this.btnBrowsePPShifts.Click += new System.EventHandler(this.btnBrowsePPShifts_Click);
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(8, 55);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(119, 13);
+            this.label12.TabIndex = 18;
+            this.label12.Text = "Export Location (Shifts):";
+            // 
+            // txtPPShiftsLocation
+            // 
+            this.txtPPShiftsLocation.Location = new System.Drawing.Point(11, 71);
+            this.txtPPShiftsLocation.Name = "txtPPShiftsLocation";
+            this.txtPPShiftsLocation.Size = new System.Drawing.Size(318, 20);
+            this.txtPPShiftsLocation.TabIndex = 17;
+            // 
             // button1
             // 
             this.button1.Location = new System.Drawing.Point(8, 170);
@@ -494,31 +529,77 @@
             this.rchStatus.TabIndex = 18;
             this.rchStatus.Text = "";
             // 
-            // btnBrowsePPShifts
+            // grpIntegrityFilters
             // 
-            this.btnBrowsePPShifts.Location = new System.Drawing.Point(335, 71);
-            this.btnBrowsePPShifts.Name = "btnBrowsePPShifts";
-            this.btnBrowsePPShifts.Size = new System.Drawing.Size(30, 20);
-            this.btnBrowsePPShifts.TabIndex = 19;
-            this.btnBrowsePPShifts.Text = "...";
-            this.btnBrowsePPShifts.UseVisualStyleBackColor = true;
-            this.btnBrowsePPShifts.Click += new System.EventHandler(this.btnBrowsePPShifts_Click);
+            this.grpIntegrityFilters.Controls.Add(this.btnRefreshDepartments);
+            this.grpIntegrityFilters.Controls.Add(this.label14);
+            this.grpIntegrityFilters.Controls.Add(this.label13);
+            this.grpIntegrityFilters.Controls.Add(this.cmbccTo);
+            this.grpIntegrityFilters.Controls.Add(this.cmbccFrom);
+            this.grpIntegrityFilters.Controls.Add(this.chkEnableFilters);
+            this.grpIntegrityFilters.Location = new System.Drawing.Point(23, 162);
+            this.grpIntegrityFilters.Name = "grpIntegrityFilters";
+            this.grpIntegrityFilters.Size = new System.Drawing.Size(354, 138);
+            this.grpIntegrityFilters.TabIndex = 10;
+            this.grpIntegrityFilters.TabStop = false;
+            this.grpIntegrityFilters.Text = "Filters";
             // 
-            // label12
+            // chkEnableFilters
             // 
-            this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(8, 55);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(119, 13);
-            this.label12.TabIndex = 18;
-            this.label12.Text = "Export Location (Shifts):";
+            this.chkEnableFilters.AutoSize = true;
+            this.chkEnableFilters.Location = new System.Drawing.Point(6, 19);
+            this.chkEnableFilters.Name = "chkEnableFilters";
+            this.chkEnableFilters.Size = new System.Drawing.Size(89, 17);
+            this.chkEnableFilters.TabIndex = 0;
+            this.chkEnableFilters.Text = "Enable Filters";
+            this.chkEnableFilters.UseVisualStyleBackColor = true;
+            this.chkEnableFilters.CheckedChanged += new System.EventHandler(this.chkEnableFilters_CheckedChanged);
             // 
-            // txtPPShiftsLocation
+            // cmbccFrom
             // 
-            this.txtPPShiftsLocation.Location = new System.Drawing.Point(11, 71);
-            this.txtPPShiftsLocation.Name = "txtPPShiftsLocation";
-            this.txtPPShiftsLocation.Size = new System.Drawing.Size(318, 20);
-            this.txtPPShiftsLocation.TabIndex = 17;
+            this.cmbccFrom.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbccFrom.FormattingEnabled = true;
+            this.cmbccFrom.Location = new System.Drawing.Point(6, 63);
+            this.cmbccFrom.Name = "cmbccFrom";
+            this.cmbccFrom.Size = new System.Drawing.Size(342, 21);
+            this.cmbccFrom.TabIndex = 1;
+            // 
+            // cmbccTo
+            // 
+            this.cmbccTo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbccTo.FormattingEnabled = true;
+            this.cmbccTo.Location = new System.Drawing.Point(6, 102);
+            this.cmbccTo.Name = "cmbccTo";
+            this.cmbccTo.Size = new System.Drawing.Size(342, 21);
+            this.cmbccTo.TabIndex = 2;
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(7, 43);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(70, 13);
+            this.label13.TabIndex = 3;
+            this.label13.Text = "Branch From:";
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(7, 87);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(60, 13);
+            this.label14.TabIndex = 4;
+            this.label14.Text = "Branch To:";
+            // 
+            // btnRefreshDepartments
+            // 
+            this.btnRefreshDepartments.Location = new System.Drawing.Point(273, 15);
+            this.btnRefreshDepartments.Name = "btnRefreshDepartments";
+            this.btnRefreshDepartments.Size = new System.Drawing.Size(75, 23);
+            this.btnRefreshDepartments.TabIndex = 5;
+            this.btnRefreshDepartments.Text = "Refresh";
+            this.btnRefreshDepartments.UseVisualStyleBackColor = true;
+            this.btnRefreshDepartments.Click += new System.EventHandler(this.btnRefreshDepartments_Click);
             // 
             // MainForm
             // 
@@ -543,6 +624,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.numInterval)).EndInit();
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
+            this.grpIntegrityFilters.ResumeLayout(false);
+            this.grpIntegrityFilters.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -595,6 +678,13 @@
         private System.Windows.Forms.Button btnBrowsePPShifts;
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.TextBox txtPPShiftsLocation;
+        private System.Windows.Forms.GroupBox grpIntegrityFilters;
+        private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.ComboBox cmbccTo;
+        private System.Windows.Forms.ComboBox cmbccFrom;
+        private System.Windows.Forms.CheckBox chkEnableFilters;
+        private System.Windows.Forms.Button btnRefreshDepartments;
     }
 }
 

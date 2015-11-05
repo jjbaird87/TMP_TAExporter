@@ -106,5 +106,17 @@ namespace TMP_TAExporter.Properties {
                 this["PeopleShiftsExportLocation"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool EnableIntegrityFilters {
+            get {
+                return ((bool)(this["EnableIntegrityFilters"]));
+            }
+            set {
+                this["EnableIntegrityFilters"] = value;
+            }
+        }
     }
 }

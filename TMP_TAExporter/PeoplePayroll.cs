@@ -86,10 +86,6 @@ namespace TMP_TAExporter
                 myCommand.Parameters.Add("@END_DATE", FbDbType.TimeStamp).Value = Helpers.GetHighestDt(to);
                 var myReader = myCommand.ExecuteReader();
 
-                var overTime = 0.0;
-                var doubleTime = 0.0;
-                var lostTime = 0.0;
-
                 var lastEmployee = "";
                 var internalCounter = 0;
                 var ds = new DataSet("NewDataSet");
@@ -100,9 +96,9 @@ namespace TMP_TAExporter
                 dt.Locale = Thread.CurrentThread.CurrentCulture;
 
                 dt.Columns.Add("Employee Code");
-                dt.Columns.Add("OT 1.5 Hours Worked", typeof (int));
-                dt.Columns.Add("OT2.0 Hours Worked", typeof (int));
-                dt.Columns.Add("Lost Time Hours", typeof (int));
+                dt.Columns.Add("OT 1.5 Hours Worked", typeof (double));
+                dt.Columns.Add("OT2.0 Hours Worked", typeof (double));
+                dt.Columns.Add("Lost Time Hours", typeof (double));
 
                 //Set locale for each -> Shift Template
                 var shiftDs = new DataSet("ShiftDataSet");
@@ -115,14 +111,19 @@ namespace TMP_TAExporter
                 shiftDt.Columns.Add("3 Shift Days Worked");
                 shiftDt.Columns.Add("Normal Shift Worked");
 
+                var overTime = 0.0;
+                var doubleTime = 0.0;
+                var lostTime = 0.0;
+
                 while (myReader.Read())
                 {
                     //increment toolbar                    
                     OnProgress((int) Math.Round((double) (100*iCounter++)/iCount));
 
                     //Last employee
-                    var emp = myReader["EMPNO"].ToString();
+                    var emp = myReader["EMPNO"].ToString().PadLeft(8, '0');
                     var shiftCode = myReader["WORKPAT"].ToString();
+                    
                     if (emp != lastEmployee && lastEmployee != "" || internalCounter == iCount)
                     {
                         //If it is the last record, add the last hours
@@ -133,8 +134,16 @@ namespace TMP_TAExporter
                             doubleTime += Convert.ToDouble(myReader["CALC2"]);
                             AddShift(shiftCode);
                         }
-                        dt.Rows.Add(emp, overTime, doubleTime, lostTime);
-                        shiftDt.Rows.Add(emp, _twelveShift, _twoShift, _threeShift, _normalShift);
+                        //Check if all values are zero - if yes do not show on report
+                        if ((lostTime + overTime + doubleTime) > 0)
+                        {
+                            //Convert values to decimal values
+                            overTime = overTime/60.0;
+                            doubleTime = doubleTime / 60.0;
+                            lostTime = lostTime / 60.0;
+                            dt.Rows.Add(lastEmployee, overTime, doubleTime, lostTime);
+                        }
+                        shiftDt.Rows.Add(lastEmployee, _twelveShift, _twoShift, _threeShift, _normalShift);
 
                         overTime = 0;
                         doubleTime = 0;
