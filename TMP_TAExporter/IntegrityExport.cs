@@ -64,7 +64,7 @@ namespace TMP_TAExporter
                     Connection = myConnection,
                     Transaction = myTransaction,
                     CommandText = "SELECT COUNT(*) FROM CLOCKD " +
-                                  "WHERE DATETIME >= @START_DATE AND DATETIME <= @END_DATE"
+                                  "WHERE DATETIME >= @START_DATE AND DATETIME <= @END_DATE AND a.CALC0 <> null"
                 };
                 if (filterEnabled)
                 {
@@ -72,7 +72,7 @@ namespace TMP_TAExporter
                                             "INNER JOIN EMP b ON a.EMPNO = b.EMP_NO " +
                                              "WHERE" +
                                             "   a.DATETIME >= @START_DATE AND a.DATETIME <= @END_DATE AND" +
-                                            "   b.COST_CENTRE >= @CCFROM AND b.COST_CENTRE <= @CCTO";
+                                            "   b.COST_CENTRE >= @CCFROM AND b.COST_CENTRE <= @CCTO AND a.CALC0 IS NOT NULL";
 
                     myCommand.Parameters.Add("@CCFROM", FbDbType.VarChar).Value = costCentreFrom;
                     myCommand.Parameters.Add("@CCTO", FbDbType.VarChar).Value = costCentreTo;
@@ -86,14 +86,14 @@ namespace TMP_TAExporter
                 var iCount = (int) myCommand.ExecuteScalar();
 
                 myCommand.CommandText = "SELECT * FROM CLOCKD " +
-                                        "WHERE DATETIME >= @START_DATE AND DATETIME <= @END_DATE " +
+                                        "WHERE DATETIME >= @START_DATE AND DATETIME <= @END_DATE AND a.CALC0 IS NOT NULL " +
                                         "ORDER BY EMPNO, DATETIME";
                 if (filterEnabled)
                 {
                     myCommand.CommandText = "SELECT * FROM CLOCKD a " +
                                             "INNER JOIN EMP b ON a.EMPNO = b.EMP_NO " +
                                             "WHERE a.DATETIME >= @START_DATE AND a.DATETIME <= @END_DATE AND " +
-                                            "b.COST_CENTRE >= @CCFROM AND b.COST_CENTRE <= @CCTO " +
+                                            "b.COST_CENTRE >= @CCFROM AND b.COST_CENTRE <= @CCTO AND a.CALC0 IS NOT NULL " +
                                             "ORDER BY a.EMPNO, a.DATETIME";
                 }
                 //myCommand.Parameters.Add("@START_DATE", FbDbType.TimeStamp).Value = Helpers.GetLowestDt(from);
@@ -156,7 +156,7 @@ namespace TMP_TAExporter
 
                         var line =
                             $"{emp.PadRight(6, ' ')} " +
-                            $"{normalTime.ToString(CultureInfo.InvariantCulture).PadLeft(3, '0')}" +
+                            $"{normalTime.ToString(CultureInfo.InvariantCulture).PadLeft(5, '0')}" +
                             $"{overTime.ToString(CultureInfo.InvariantCulture).PadLeft(3, '0')}" +
                             $"{doubleTime.ToString(CultureInfo.InvariantCulture).PadLeft(3, '0')}" +
                             $"{calc3.ToString(CultureInfo.InvariantCulture).PadLeft(3, '0')}" +
