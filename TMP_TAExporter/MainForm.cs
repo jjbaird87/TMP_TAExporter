@@ -42,6 +42,7 @@ namespace TMP_TAExporter
             numInterval.Value = Settings.Default.TimerInterval;
             chkSamsungEnabled.Checked = Settings.Default.TimerEnabled;
             chkEnableFilters.Checked = Settings.Default.EnableIntegrityFilters;
+            txtNetworkLocation.Text = Settings.Default.NetworkLocation;
 
             SamsungExport.OnProgressHandler += SamsungExport_OnProgressHandler;
             IntegrityExport.OnProgressHandler += IntegrityExport_OnProgressHandler;
@@ -102,7 +103,7 @@ namespace TMP_TAExporter
                     "User=SYSDBA;" +
                     "Password=masterkey;" +
                     "Database=" + @txtTmpDbLoc.Text + ";" +
-                    "DataSource=localhost;" +
+                    "DataSource=" + @txtNetworkLocation.Text +";" +
                     "Port=3050;" +
                     "Dialect=3;" +
                     "Charset=NONE;" +
@@ -111,6 +112,7 @@ namespace TMP_TAExporter
                     "Pooling=true;" +
                     "Packet Size=8192;" +
                     "ServerType=0";
+
 
                 var myConnection = new FbConnection(connectionString);
                 myConnection.Open();
@@ -239,29 +241,49 @@ namespace TMP_TAExporter
 
         private void LoadCostCentres()
         {
-            if (Settings.Default.TmpDbLocation =="")
-                return;
-
-            var da = new DataAccess(Settings.Default.TmpDbLocation);
-            var cc =  da.GetCostCentres();
-            foreach (var costCentre in cc)
+            try
             {
-                cmbccFrom.Items.Add(new ComboBoxItemCostCentre
+
+
+                if (Settings.Default.TmpDbLocation == "")
+                    return;
+
+                var da = new DataAccess(Settings.Default.TmpDbLocation, Settings.Default.NetworkLocation);
+                var cc = da.GetCostCentres();
+                foreach (var costCentre in cc)
                 {
-                    ItemObject = costCentre
-                });
-                cmbccTo.Items.Add(new ComboBoxItemCostCentre
-                {
-                    ItemObject = costCentre
-                });
+                    cmbccFrom.Items.Add(new ComboBoxItemCostCentre
+                    {
+                        ItemObject = costCentre
+                    });
+                    cmbccTo.Items.Add(new ComboBoxItemCostCentre
+                    {
+                        ItemObject = costCentre
+                    });
+                }
+
+                if (cmbccFrom.Items.Count > 0)
+                    cmbccFrom.SelectedIndex = 0;
+
+                if (cmbccTo.Items.Count > 0)
+                    cmbccTo.SelectedIndex = cmbccTo.Items.Count - 1;
             }
-
-            if (cmbccFrom.Items.Count > 0)
-                cmbccFrom.SelectedIndex = 0;
-
-            if (cmbccTo.Items.Count > 0)
-                cmbccTo.SelectedIndex = cmbccTo.Items.Count-1;
+            catch
+            {
+                //do nothing                
+            }
         }
 
+        private void txtNetworkLocation_TextChanged(object sender, EventArgs e)
+        {
+            Settings.Default.NetworkLocation = txtNetworkLocation.Text;
+            Settings.Default.Save();
+        }
+
+        private void txtTmpDbLoc_TextChanged(object sender, EventArgs e)
+        {
+            Settings.Default.TmpDbLocation = txtTmpDbLoc.Text;
+            Settings.Default.Save();
+        }
     }
 }

@@ -118,5 +118,17 @@ namespace TMP_TAExporter.Properties {
                 this["EnableIntegrityFilters"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("localhost")]
+        public string NetworkLocation {
+            get {
+                return ((string)(this["NetworkLocation"]));
+            }
+            set {
+                this["NetworkLocation"] = value;
+            }
+        }
     }
 }

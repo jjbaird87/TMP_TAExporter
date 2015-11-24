@@ -26,5 +26,8 @@
     <Setting Name="EnableIntegrityFilters" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
+    <Setting Name="NetworkLocation" Type="System.String" Scope="User">
+      <Value Profile="(Default)">localhost</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

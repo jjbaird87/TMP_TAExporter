@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using DocumentFormat.OpenXml.Bibliography;
 using FirebirdSql.Data.FirebirdClient;
 
@@ -11,10 +12,12 @@ namespace TMP_TAExporter.Classes
     public class DataAccess
     {
         private string DatabaseLocation { get; set; }
+        private string NetworkLocation { get; set; }
 
-        public DataAccess(string databaseLocation)
+        public DataAccess(string databaseLocation, string networkLocation)
         {
             DatabaseLocation = databaseLocation;
+            NetworkLocation = networkLocation;
         }
 
 
@@ -23,7 +26,7 @@ namespace TMP_TAExporter.Classes
             return "User=SYSDBA;" +
                     "Password=masterkey;" +
                     "Database=" + DatabaseLocation + ";" +
-                    "DataSource=localhost;" +
+                    "DataSource="+ NetworkLocation +";" +
                     "Port=3050;" +
                     "Dialect=3;" +
                     "Charset=NONE;" +
@@ -36,6 +39,10 @@ namespace TMP_TAExporter.Classes
 
         public List<CostCentre> GetCostCentres()
         {
+            try
+            {
+
+            
             var myConnection = new FbConnection(GetConnectionString());
             myConnection.Open();
 
@@ -61,6 +68,12 @@ namespace TMP_TAExporter.Classes
             }
 
             return costCentres;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                return null;
+            }
         }
     }
 }

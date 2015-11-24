@@ -45,7 +45,7 @@ namespace TMP_TAExporter
                     "User=SYSDBA;" +
                     "Password=masterkey;" +
                     "Database=" + Settings.Default.TmpDbLocation + ";" +
-                    "DataSource=localhost;" +
+                    "DataSource=" + Settings.Default.NetworkLocation + ";" +
                     "Port=3050;" +
                     "Dialect=3;" +
                     "Charset=NONE;" +
@@ -156,11 +156,11 @@ namespace TMP_TAExporter
 
                         var line =
                             $"{emp.PadRight(6, ' ')} " +
-                            $"{normalTime.ToString(CultureInfo.InvariantCulture).PadLeft(5, '0')}" +
-                            $"{overTime.ToString(CultureInfo.InvariantCulture).PadLeft(3, '0')}" +
-                            $"{doubleTime.ToString(CultureInfo.InvariantCulture).PadLeft(3, '0')}" +
-                            $"{calc3.ToString(CultureInfo.InvariantCulture).PadLeft(3, '0')}" +
-                            $"{calc4.ToString(CultureInfo.InvariantCulture).PadLeft(3, '0')}" +
+                            $"{Math.Round(normalTime/60,0).ToString(CultureInfo.InvariantCulture).PadLeft(3, '0')}" +
+                            $"{Math.Round(overTime/60,0).ToString(CultureInfo.InvariantCulture).PadLeft(3, '0')}" +
+                            $"{Math.Round(doubleTime/60,0).ToString(CultureInfo.InvariantCulture).PadLeft(3, '0')}" +
+                            $"{Math.Round(calc3/60,0).ToString(CultureInfo.InvariantCulture).PadLeft(3, '0')}" +
+                            $"{Math.Round(calc4/60,0).ToString(CultureInfo.InvariantCulture).PadLeft(3, '0')}" +
                             $"{Environment.NewLine}";
 
                         using (var sw = new StreamWriter(fileName, true))
