@@ -108,6 +108,8 @@ namespace TMP_TAExporter
                 var targetHours0 = 0.0;
                 var lastEmployee = "";
                 var internalCounter = 0;
+                var shifts = 0;
+
                 while (myReader.Read())
                 {
                     //increment toolbar                    
@@ -126,6 +128,7 @@ namespace TMP_TAExporter
                             doubleTime += Convert.ToDouble(myReader["CALC2"]);
                             calc3 += Convert.ToDouble(myReader["CALC3"]);
                             calc4 += Convert.ToDouble(myReader["CALC4"]);
+                            shifts += Convert.ToInt32(myReader["SHIFTS"]);
                         }
 
                         if (applyTargetHoursCalc)
@@ -155,12 +158,13 @@ namespace TMP_TAExporter
                         }
 
                         var line =
-                            $"{emp.PadRight(6, ' ')} " +
-                            $"{Math.Round(normalTime/60,0).ToString(CultureInfo.InvariantCulture).PadLeft(3, '0')}" +
-                            $"{Math.Round(overTime/60,0).ToString(CultureInfo.InvariantCulture).PadLeft(3, '0')}" +
-                            $"{Math.Round(doubleTime/60,0).ToString(CultureInfo.InvariantCulture).PadLeft(3, '0')}" +
-                            $"{Math.Round(calc3/60,0).ToString(CultureInfo.InvariantCulture).PadLeft(3, '0')}" +
-                            $"{Math.Round(calc4/60,0).ToString(CultureInfo.InvariantCulture).PadLeft(3, '0')}" +
+                            $"{emp.PadRight(7, ' ')} " +
+                            $"{Math.Round(normalTime/60,2).ToString("#.00", CultureInfo.InvariantCulture).Replace(".","").PadLeft(5, '0')}" +
+                            $"{Math.Round(overTime/60,2).ToString("#.00", CultureInfo.InvariantCulture).Replace(".", "").PadLeft(5, '0')}" +
+                            $"{Math.Round(doubleTime/60,2).ToString("#.00", CultureInfo.InvariantCulture).Replace(".", "").PadLeft(5, '0')}" +
+                            $"{Math.Round(calc3/60,2).ToString("#.00", CultureInfo.InvariantCulture).Replace(".", "").PadLeft(5, '0')}" +
+                            $"{Math.Round(calc4/60,2).ToString("#.00", CultureInfo.InvariantCulture).Replace(".", "").PadLeft(5, '0')}" +
+                            $"{shifts.ToString().PadRight(3, '0')}" +
                             $"{Environment.NewLine}";
 
                         using (var sw = new StreamWriter(fileName, true))
@@ -172,6 +176,7 @@ namespace TMP_TAExporter
                         normalTime = 0;
                         overTime = 0;
                         doubleTime = 0;
+                        shifts = 0;
                     }
                     else
                     {
@@ -181,6 +186,7 @@ namespace TMP_TAExporter
                         doubleTime += Convert.ToDouble(myReader["CALC2"]);
                         calc3 += Convert.ToDouble(myReader["CALC3"]);
                         calc4 += Convert.ToDouble(myReader["CALC4"]);
+                        shifts += Convert.ToInt32(myReader["SHIFTS"]);
                     }
 
                     lastEmployee = emp;

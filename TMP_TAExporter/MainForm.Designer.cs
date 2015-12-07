@@ -70,6 +70,8 @@
             this.label10 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.label15 = new System.Windows.Forms.Label();
+            this.txtNetworkLocation = new System.Windows.Forms.TextBox();
             this.numInterval = new System.Windows.Forms.NumericUpDown();
             this.label8 = new System.Windows.Forms.Label();
             this.btnTestConnection = new System.Windows.Forms.Button();
@@ -81,8 +83,6 @@
             this.lblNotification = new System.Windows.Forms.ToolStripLabel();
             this.rchStatus = new System.Windows.Forms.RichTextBox();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.label15 = new System.Windows.Forms.Label();
-            this.txtNetworkLocation = new System.Windows.Forms.TextBox();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.grpIntegrityFilters.SuspendLayout();
@@ -396,6 +396,7 @@
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Text = "Peoples Payroll Export";
             this.tabPage4.UseVisualStyleBackColor = true;
+            this.tabPage4.Click += new System.EventHandler(this.tabPage4_Click);
             // 
             // btnBrowsePPShifts
             // 
@@ -509,6 +510,23 @@
             this.tabPage2.Text = "Settings";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Location = new System.Drawing.Point(11, 14);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(87, 13);
+            this.label15.TabIndex = 7;
+            this.label15.Text = "Network location";
+            // 
+            // txtNetworkLocation
+            // 
+            this.txtNetworkLocation.Location = new System.Drawing.Point(14, 30);
+            this.txtNetworkLocation.Name = "txtNetworkLocation";
+            this.txtNetworkLocation.Size = new System.Drawing.Size(327, 20);
+            this.txtNetworkLocation.TabIndex = 6;
+            this.txtNetworkLocation.TextChanged += new System.EventHandler(this.txtNetworkLocation_TextChanged);
+            // 
             // numInterval
             // 
             this.numInterval.Location = new System.Drawing.Point(14, 146);
@@ -605,23 +623,6 @@
             this.rchStatus.Size = new System.Drawing.Size(393, 165);
             this.rchStatus.TabIndex = 18;
             this.rchStatus.Text = "";
-            // 
-            // label15
-            // 
-            this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(11, 14);
-            this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(87, 13);
-            this.label15.TabIndex = 7;
-            this.label15.Text = "Network location";
-            // 
-            // txtNetworkLocation
-            // 
-            this.txtNetworkLocation.Location = new System.Drawing.Point(14, 30);
-            this.txtNetworkLocation.Name = "txtNetworkLocation";
-            this.txtNetworkLocation.Size = new System.Drawing.Size(327, 20);
-            this.txtNetworkLocation.TabIndex = 6;
-            this.txtNetworkLocation.TextChanged += new System.EventHandler(this.txtNetworkLocation_TextChanged);
             // 
             // MainForm
             // 

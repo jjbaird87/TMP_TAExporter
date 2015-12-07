@@ -285,5 +285,10 @@ namespace TMP_TAExporter
             Settings.Default.TmpDbLocation = txtTmpDbLoc.Text;
             Settings.Default.Save();
         }
+
+        private void tabPage4_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
