@@ -123,11 +123,11 @@ namespace TMP_TAExporter
                     //Last employee
                     var emp = myReader["EMPNO"].ToString().PadLeft(8, '0');
                     var shiftCode = myReader["WORKPAT"].ToString();
-                    
-                    if (emp != lastEmployee && lastEmployee != "" || internalCounter == iCount)
+
+                    if (emp != lastEmployee && lastEmployee != "" || internalCounter +1 == iCount)
                     {
                         //If it is the last record, add the last hours
-                        if (internalCounter == iCount)
+                        if (internalCounter+1 == iCount)
                         {
                             lostTime += Convert.ToDouble(myReader["LOST"]);
                             overTime += Convert.ToDouble(myReader["CALC1"]);
@@ -153,6 +153,12 @@ namespace TMP_TAExporter
                         _twoShift = 0;
                         _threeShift = 0;
                         _twelveShift = 0;
+
+                        //Add the values of the new record
+                        lostTime += Convert.ToDouble(myReader["LOST"]);
+                        overTime += Convert.ToDouble(myReader["CALC1"]);
+                        doubleTime += Convert.ToDouble(myReader["CALC2"]);
+                        AddShift(shiftCode);
                     }
                     else
                     {
