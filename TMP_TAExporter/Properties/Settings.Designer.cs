@@ -130,5 +130,17 @@ namespace TMP_TAExporter.Properties {
                 this["NetworkLocation"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool EnablePeoplesPayrollFilters {
+            get {
+                return ((bool)(this["EnablePeoplesPayrollFilters"]));
+            }
+            set {
+                this["EnablePeoplesPayrollFilters"] = value;
+            }
+        }
     }
 }

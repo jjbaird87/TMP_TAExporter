@@ -43,12 +43,15 @@ namespace TMP_TAExporter
             chkSamsungEnabled.Checked = Settings.Default.TimerEnabled;
             chkEnableFilters.Checked = Settings.Default.EnableIntegrityFilters;
             txtNetworkLocation.Text = Settings.Default.NetworkLocation;
+            chkEnablePeoplePayrollFilters.Checked = Settings.Default.EnablePeoplesPayrollFilters;
 
             SamsungExport.OnProgressHandler += SamsungExport_OnProgressHandler;
             IntegrityExport.OnProgressHandler += IntegrityExport_OnProgressHandler;
             PeoplePayroll.OnProgressHandler += PeoplePayroll_OnProgressHandler;
 
-            LoadCostCentres();
+            LoadDepartments();
+            LoadCompanies();
+            //LoadCostCentres();
 
             timer1.Enabled = true;
             timer1.Interval = 1000;
@@ -169,8 +172,8 @@ namespace TMP_TAExporter
         private void btnStartIntegrity_Click(object sender, EventArgs e)
         {
             AddMessage("Starting Integrity Export");
-            var ccFrom = ((ComboBoxItemCostCentre) cmbccFrom.SelectedItem).ItemObject.Code;
-            var ccTo = ((ComboBoxItemCostCentre)cmbccTo.SelectedItem).ItemObject.Code;
+            var ccFrom = ((ComboBoxItemDepartment) cmbccFrom.SelectedItem).ItemObject.Code;
+            var ccTo = ((ComboBoxItemDepartment)cmbccTo.SelectedItem).ItemObject.Code;
             var err = IntegrityExport.ExportIntegrity(dtIntegrityStart.Value, dtIntegrityEnd.Value,
                 chkApplyTarget.Checked, chkEnableFilters.Checked, ccFrom, ccTo);
             AddMessage(err);
@@ -208,7 +211,9 @@ namespace TMP_TAExporter
         private void button1_Click_1(object sender, EventArgs e)
         {
             AddMessage("Starting People's Payroll Export");
-            var err = PeoplePayroll.Export(dtPPStart.Value, dtPPEnd.Value);
+            var companyFrom = ((ComboBoxItemCompany)cmbCompanyFrom.SelectedItem).ItemObject.Code;
+            var companyTo = ((ComboBoxItemCompany)cmbCompanyTo.SelectedItem).ItemObject.Code;
+            var err = PeoplePayroll.Export(dtPPStart.Value, dtPPEnd.Value, chkEnablePeoplePayrollFilters.Checked, companyFrom, companyTo);
             AddMessage(err);
         }
 
@@ -236,15 +241,80 @@ namespace TMP_TAExporter
 
         private void btnRefreshDepartments_Click(object sender, EventArgs e)
         {
-            LoadCostCentres();
+            //LoadCostCentres();
+            LoadDepartments();
+        }
+
+        private void LoadCompanies()
+        {
+            try
+            {
+                if (Settings.Default.TmpDbLocation == "")
+                    return;
+
+                var da = new DataAccess(Settings.Default.TmpDbLocation, Settings.Default.NetworkLocation);
+                var companies = da.GetCompanies();
+                foreach (var company in companies)
+                {
+                    cmbCompanyFrom.Items.Add(new ComboBoxItemCompany
+                    {
+                        ItemObject = company
+                    });
+                    cmbCompanyTo.Items.Add(new ComboBoxItemCompany
+                    {
+                        ItemObject = company
+                    });
+                }
+
+                if (cmbCompanyFrom.Items.Count > 0)
+                    cmbCompanyFrom.SelectedIndex = 0;
+
+                if (cmbCompanyTo.Items.Count > 0)
+                    cmbCompanyTo.SelectedIndex = cmbCompanyTo.Items.Count - 1;
+            }
+            catch
+            {
+                //do nothing                
+            }
+        }
+
+        private void LoadDepartments()
+        {
+            try
+            {
+                if (Settings.Default.TmpDbLocation == "")
+                    return;
+
+                var da = new DataAccess(Settings.Default.TmpDbLocation, Settings.Default.NetworkLocation);
+                var deps = da.GetDepartments();
+                foreach (var department in deps)
+                {
+                    cmbccFrom.Items.Add(new ComboBoxItemDepartment
+                    {
+                        ItemObject = department
+                    });
+                    cmbccTo.Items.Add(new ComboBoxItemDepartment
+                    {
+                        ItemObject = department
+                    });
+                }
+
+                if (cmbccFrom.Items.Count > 0)
+                    cmbccFrom.SelectedIndex = 0;
+
+                if (cmbccTo.Items.Count > 0)
+                    cmbccTo.SelectedIndex = cmbccTo.Items.Count - 1;
+            }
+            catch
+            {
+                //do nothing                
+            }
         }
 
         private void LoadCostCentres()
         {
             try
             {
-
-
                 if (Settings.Default.TmpDbLocation == "")
                     return;
 
@@ -289,6 +359,22 @@ namespace TMP_TAExporter
         private void tabPage4_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void groupBox1_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void chkEnablePeoplePayrollFilters_CheckedChanged(object sender, EventArgs e)
+        {
+            Settings.Default.EnablePeoplesPayrollFilters = chkEnablePeoplePayrollFilters.Checked;
+            Settings.Default.Save();
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            LoadCompanies();
         }
     }
 }

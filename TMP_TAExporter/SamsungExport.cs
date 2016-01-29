@@ -208,7 +208,7 @@ namespace TMP_TAExporter
                 "User=SYSDBA;" +
                 "Password=masterkey;" +
                 "Database=" + Settings.Default.TmpDbLocation + ";" +
-                "w  ="+Settings.Default.NetworkLocation+";" +
+                "DataSource=" + Settings.Default.NetworkLocation+";" +
                 "Port=3050;" +
                 "Dialect=3;" +
                 "Charset=NONE;" +

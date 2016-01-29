@@ -83,6 +83,13 @@
             this.lblNotification = new System.Windows.Forms.ToolStripLabel();
             this.rchStatus = new System.Windows.Forms.RichTextBox();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.button2 = new System.Windows.Forms.Button();
+            this.label16 = new System.Windows.Forms.Label();
+            this.label17 = new System.Windows.Forms.Label();
+            this.cmbCompanyTo = new System.Windows.Forms.ComboBox();
+            this.cmbCompanyFrom = new System.Windows.Forms.ComboBox();
+            this.chkEnablePeoplePayrollFilters = new System.Windows.Forms.CheckBox();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.grpIntegrityFilters.SuspendLayout();
@@ -91,6 +98,7 @@
             this.tabPage2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numInterval)).BeginInit();
             this.toolStrip1.SuspendLayout();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -378,6 +386,7 @@
             // 
             // tabPage4
             // 
+            this.tabPage4.Controls.Add(this.groupBox1);
             this.tabPage4.Controls.Add(this.btnBrowsePPShifts);
             this.tabPage4.Controls.Add(this.label12);
             this.tabPage4.Controls.Add(this.txtPPShiftsLocation);
@@ -426,7 +435,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(8, 170);
+            this.button1.Location = new System.Drawing.Point(8, 306);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(354, 23);
             this.button1.TabIndex = 16;
@@ -624,6 +633,79 @@
             this.rchStatus.TabIndex = 18;
             this.rchStatus.Text = "";
             // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.button2);
+            this.groupBox1.Controls.Add(this.label16);
+            this.groupBox1.Controls.Add(this.label17);
+            this.groupBox1.Controls.Add(this.cmbCompanyTo);
+            this.groupBox1.Controls.Add(this.cmbCompanyFrom);
+            this.groupBox1.Controls.Add(this.chkEnablePeoplePayrollFilters);
+            this.groupBox1.Location = new System.Drawing.Point(11, 157);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(354, 138);
+            this.groupBox1.TabIndex = 20;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Filters";
+            this.groupBox1.Enter += new System.EventHandler(this.groupBox1_Enter);
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(273, 15);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(75, 23);
+            this.button2.TabIndex = 5;
+            this.button2.Text = "Refresh";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Location = new System.Drawing.Point(7, 87);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(70, 13);
+            this.label16.TabIndex = 4;
+            this.label16.Text = "Company To:";
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Location = new System.Drawing.Point(7, 43);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(80, 13);
+            this.label17.TabIndex = 3;
+            this.label17.Text = "Company From:";
+            // 
+            // cmbCompanyTo
+            // 
+            this.cmbCompanyTo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbCompanyTo.FormattingEnabled = true;
+            this.cmbCompanyTo.Location = new System.Drawing.Point(6, 102);
+            this.cmbCompanyTo.Name = "cmbCompanyTo";
+            this.cmbCompanyTo.Size = new System.Drawing.Size(342, 21);
+            this.cmbCompanyTo.TabIndex = 2;
+            // 
+            // cmbCompanyFrom
+            // 
+            this.cmbCompanyFrom.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbCompanyFrom.FormattingEnabled = true;
+            this.cmbCompanyFrom.Location = new System.Drawing.Point(6, 63);
+            this.cmbCompanyFrom.Name = "cmbCompanyFrom";
+            this.cmbCompanyFrom.Size = new System.Drawing.Size(342, 21);
+            this.cmbCompanyFrom.TabIndex = 1;
+            // 
+            // chkEnablePeoplePayrollFilters
+            // 
+            this.chkEnablePeoplePayrollFilters.AutoSize = true;
+            this.chkEnablePeoplePayrollFilters.Location = new System.Drawing.Point(6, 19);
+            this.chkEnablePeoplePayrollFilters.Name = "chkEnablePeoplePayrollFilters";
+            this.chkEnablePeoplePayrollFilters.Size = new System.Drawing.Size(89, 17);
+            this.chkEnablePeoplePayrollFilters.TabIndex = 0;
+            this.chkEnablePeoplePayrollFilters.Text = "Enable Filters";
+            this.chkEnablePeoplePayrollFilters.UseVisualStyleBackColor = true;
+            this.chkEnablePeoplePayrollFilters.CheckedChanged += new System.EventHandler(this.chkEnablePeoplePayrollFilters_CheckedChanged);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -633,7 +715,7 @@
             this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.tabControl1);
             this.Name = "MainForm";
-            this.Text = "Time Manager Platinum - Payroll Exporter";
+            this.Text = " ";
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
@@ -649,6 +731,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.numInterval)).EndInit();
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -710,6 +794,13 @@
         private System.Windows.Forms.Button btnRefreshDepartments;
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.TextBox txtNetworkLocation;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.Label label17;
+        private System.Windows.Forms.ComboBox cmbCompanyTo;
+        private System.Windows.Forms.ComboBox cmbCompanyFrom;
+        private System.Windows.Forms.CheckBox chkEnablePeoplePayrollFilters;
     }
 }
 

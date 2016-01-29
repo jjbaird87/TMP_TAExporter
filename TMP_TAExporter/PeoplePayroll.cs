@@ -32,7 +32,7 @@ namespace TMP_TAExporter
             }
         }
 
-        public static string Export(DateTime from, DateTime to)
+        public static string Export(DateTime from, DateTime to, bool filterEnabled = false, string companyFrom = "", string companyTo = "")
         {
             if (_bRunning)
                 return @"Export already running";
@@ -69,8 +69,20 @@ namespace TMP_TAExporter
                     Connection = myConnection,
                     Transaction = myTransaction,
                     CommandText = "SELECT COUNT(*) FROM CLOCKD " +
-                                  "WHERE DATETIME >= @START_DATE AND DATETIME <= @END_DATE"
+                                  "WHERE DATETIME >= @START_DATE AND DATETIME <= @END_DATE AND a.CALC0 IS NOT NULL"
                 };
+                if (filterEnabled)
+                {
+                    myCommand.CommandText = "SELECT COUNT(*) FROM CLOCKD a " +
+                                            "INNER JOIN EMP b ON a.EMPNO = b.EMP_NO " +
+                                             "WHERE" +
+                                            "   a.DATETIME >= @START_DATE AND a.DATETIME <= @END_DATE AND" +
+                                            "   b.COMPANY >= @COMPANYFROM AND b.COMPANY <= @COMPANYTO AND a.CALC0 IS NOT NULL";
+
+                    myCommand.Parameters.Add("@COMPANYFROM", FbDbType.VarChar).Value = companyFrom;
+                    myCommand.Parameters.Add("@COMPANYTO", FbDbType.VarChar).Value = companyTo;
+                }
+
 
                 myCommand.Parameters.Add("@START_DATE", FbDbType.TimeStamp).Value = Helpers.GetLowestDt(from);
                 myCommand.Parameters.Add("@END_DATE", FbDbType.TimeStamp).Value = Helpers.GetHighestDt(to);
@@ -81,6 +93,14 @@ namespace TMP_TAExporter
                 myCommand.CommandText = "SELECT * FROM CLOCKD " +
                                         "WHERE DATETIME >= @START_DATE AND DATETIME <= @END_DATE " +
                                         "ORDER BY EMPNO, DATETIME";
+                if (filterEnabled)
+                {
+                    myCommand.CommandText = "SELECT * FROM CLOCKD a " +
+                                            "INNER JOIN EMP b ON a.EMPNO = b.EMP_NO " +
+                                            "WHERE a.DATETIME >= @START_DATE AND a.DATETIME <= @END_DATE AND " +
+                                            "b.COMPANY >= @COMPANYFROM AND b.COMPANY <= @COMPANYTO AND a.CALC0 IS NOT NULL AND a.TARGET0 IS NOT NULL " +
+                                            "ORDER BY a.EMPNO, a.DATETIME";
+                }
 
                 myCommand.Parameters.Add("@START_DATE", FbDbType.TimeStamp).Value = Helpers.GetLowestDt(from);
                 myCommand.Parameters.Add("@END_DATE", FbDbType.TimeStamp).Value = Helpers.GetHighestDt(to);

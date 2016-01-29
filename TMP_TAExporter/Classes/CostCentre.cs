@@ -12,4 +12,18 @@ namespace TMP_TAExporter.Classes
         
         public string Description { get; set; }
     }
+
+    public class Department
+    {
+        public string Code { get; set; }
+
+        public string Description { get; set; }
+    }
+
+    public class Company
+    {
+        public string Code { get; set; }
+
+        public string Description { get; set; }
+    }
 }

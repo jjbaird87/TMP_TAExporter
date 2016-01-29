@@ -72,7 +72,7 @@ namespace TMP_TAExporter
                                             "INNER JOIN EMP b ON a.EMPNO = b.EMP_NO " +
                                              "WHERE" +
                                             "   a.DATETIME >= @START_DATE AND a.DATETIME <= @END_DATE AND" +
-                                            "   b.COST_CENTRE >= @CCFROM AND b.COST_CENTRE <= @CCTO AND a.CALC0 IS NOT NULL";
+                                            "   b.DEPARTMENT >= @CCFROM AND b.DEPARTMENT <= @CCTO AND a.CALC0 IS NOT NULL";
 
                     myCommand.Parameters.Add("@CCFROM", FbDbType.VarChar).Value = costCentreFrom;
                     myCommand.Parameters.Add("@CCTO", FbDbType.VarChar).Value = costCentreTo;
@@ -93,7 +93,7 @@ namespace TMP_TAExporter
                     myCommand.CommandText = "SELECT * FROM CLOCKD a " +
                                             "INNER JOIN EMP b ON a.EMPNO = b.EMP_NO " +
                                             "WHERE a.DATETIME >= @START_DATE AND a.DATETIME <= @END_DATE AND " +
-                                            "b.COST_CENTRE >= @CCFROM AND b.COST_CENTRE <= @CCTO AND a.CALC0 IS NOT NULL " +
+                                            "b.COST_CENTRE >= @CCFROM AND b.COST_CENTRE <= @CCTO AND a.CALC0 IS NOT NULL AND a.TARGET0 IS NOT NULL " +
                                             "ORDER BY a.EMPNO, a.DATETIME";
                 }
                 //myCommand.Parameters.Add("@START_DATE", FbDbType.TimeStamp).Value = Helpers.GetLowestDt(from);
@@ -111,12 +111,15 @@ namespace TMP_TAExporter
                 var shifts = 0;
 
                 while (myReader.Read())
-                {
+                {                   
                     //increment toolbar                    
                     OnProgress((int) Math.Round((double) (100*iCounter++)/iCount));
 
                     //Last employee
                     var emp = myReader["EMPNO"].ToString();
+                    if (emp == "11643")
+                        emp = "11643";
+
                     if (emp != lastEmployee && lastEmployee != "" || internalCounter == iCount)
                     {
                         //If it is the last record, add the last hours
@@ -158,12 +161,12 @@ namespace TMP_TAExporter
                         }
 
                         var line =
-                            $"{emp.PadRight(7, ' ')} " +
+                            $"{lastEmployee.PadRight(7, ' ')}" +
                             $"{Math.Round(normalTime/60,2).ToString("#.00", CultureInfo.InvariantCulture).Replace(".","").PadLeft(5, '0')}" +
                             $"{Math.Round(overTime/60,2).ToString("#.00", CultureInfo.InvariantCulture).Replace(".", "").PadLeft(5, '0')}" +
                             $"{Math.Round(doubleTime/60,2).ToString("#.00", CultureInfo.InvariantCulture).Replace(".", "").PadLeft(5, '0')}" +
                             $"{Math.Round(calc3/60,2).ToString("#.00", CultureInfo.InvariantCulture).Replace(".", "").PadLeft(5, '0')}" +
-                            $"{Math.Round(calc4/60,2).ToString("#.00", CultureInfo.InvariantCulture).Replace(".", "").PadLeft(5, '0')}" +
+                            //$"{Math.Round(calc4/60,2).ToString("#.00", CultureInfo.InvariantCulture).Replace(".", "").PadLeft(5, '0')}" +
                             $"{shifts.ToString().PadRight(3, '0')}" +
                             $"{Environment.NewLine}";
 
@@ -172,11 +175,14 @@ namespace TMP_TAExporter
                             sw.Write(line);
                         }
 
-                        targetHours0 = 0;
-                        normalTime = 0;
-                        overTime = 0;
-                        doubleTime = 0;
-                        shifts = 0;
+                        //Add hours of the current employee
+                        targetHours0 = Convert.ToDouble(myReader["TARGET0"]);
+                        normalTime = Convert.ToDouble(myReader["CALC0"]);
+                        overTime = Convert.ToDouble(myReader["CALC1"]);
+                        doubleTime = Convert.ToDouble(myReader["CALC2"]);
+                        calc3 = Convert.ToDouble(myReader["CALC3"]);
+                        calc4 = Convert.ToDouble(myReader["CALC4"]);
+                        shifts = Convert.ToInt32(myReader["SHIFTS"]);
                     }
                     else
                     {
